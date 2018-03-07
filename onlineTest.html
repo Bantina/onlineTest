@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<title>在线测评</title>
+	<link href="http://res11.xesimg.com/public/favicon.ico" rel="shortcut icon">
+	<link rel="stylesheet" href="css/onlineTest.css">
+	<script src="http://res16.xesimg.com/video/liveClass/js/lib/jquery-1.11.3.min.js"></script>
+	<script src="https://res13.xesimg.com/touch/js/vue.min.js"></script>
+</head>
+<body>
+	<div class="container" id="onlineTest">
+		<div class="app-title" v-if="!showHome">
+			<span class="timer-wrapper">
+				<img src="img/clock.png" alt="">
+				<span class="timer">00:00</span>
+			</span>
+			<span class="title">{{appTitle}} ({{titleIndex}}/3)</span>
+			<span class="app-close">
+				<img src="img/close-btn.png" alt="">
+			</span>
+		</div>
+		<div class="app-progress" v-if="pageIndex!=0">
+			<div class="current"></div>
+		</div>
+
+		<!-- 首页 -->
+		<section class="online-home" v-if="showHome">
+			<div class="home-wrapper">
+				<ul class="home-lists">
+					<li>独家研发单词+句子智能口语测评</li>
+					<li>人机对话，紧跟考试趋势</li>
+					<li>辅导老师一对一纠正发音</li>
+				</ul>
+				<button class="btn startTest" @click="nextEvent()">开始测评</button>
+			</div>
+		</section>
+		
+		
+		<!-- 基础英语测评 -->
+		<section class="online-screen oral-test" v-if="showOral">
+			<div class="oral-test-item">
+				<div class="desc-img">
+					<img src="img/test.png" alt="">
+				</div>
+				<p class="desc-topic">What's your name?</p>
+				<p class="desc-translate">你叫什么名字？</p>
+				<div class="praise-wrapper">
+					<img src="img/praise.png" alt="">
+					<span>Fantastic!</span>
+				</div>
+			</div>
+		</section>
+		
+		<!-- 角色扮演智能对话 -->
+		<section class="online-screen" v-if="showRolePlay">
+			<div class="role-item role-item-left">
+				<div class="role-avator">
+					<img src="img/avator.jpg" alt="">
+				</div>
+				<div class="role-content orange">
+					<p class="name">Lisa黎明老师</p>
+					<div class="text-wrap">
+						<img src="img/volume-white.png" alt="">
+						<span class="text">What's your name?</span>
+					</div>
+				</div>
+			</div>
+			<div class="role-item role-item-left">
+				<div class="role-avator">
+					<img src="img/avator.jpg" alt="">
+				</div>
+				<div class="role-content">
+					<p class="name">Lisa黎明老师</p>
+					<div class="text-wrap">
+						<img src="img/volume-black.png" alt="">
+						<span class="text">What's your name?</span>
+					</div>
+				</div>
+			</div>
+			<div class="role-item role-item-right">
+				<div class="role-avator">
+					<img src="img/avator.jpg" alt="">
+				</div>
+				<div class="role-content red">
+					<p class="name">Lisa黎明老师</p>
+					<div class="text-wrap">
+						<span class="text">What's your name?</span>
+						<img src="img/volume-white.png" alt="">
+					</div>
+				</div>
+			</div>
+		</section>
+		
+		<!-- 一对一纠音 -->
+		<section class="online-screen" v-if="showTutor">
+			<div class="desc-img">
+				<img src="img/test.png" alt="">
+			</div>
+			<div class="desc-paragraph">
+				My aunt Jennifer is an actress. She must be at least thirty-five years old. In spite of this, she often appears on the stage as a young girl. Jennifer will have to take part in a new play soon. This time, she will be a girl of seventeen.
+			</div>
+			<div class="role-item role-item-right">
+				<div class="role-avator">
+					<img src="img/avator.jpg" alt="">
+				</div>
+				<div class="role-content red">
+					<p class="name">Lisa黎明老师</p>
+					<div class="text-wrap">
+						<span class="text">What's your name?</span>
+						<img src="img/play2.png" alt="">
+					</div>
+					<div class="role-time">5"</div>
+				</div>
+			</div>
+			<div class="role-item role-item-left">
+				<div class="role-avator">
+					<img src="img/avator.jpg" alt="">
+				</div>
+				<div class="role-content gray">
+					<p class="name">Lisa黎明老师</p>
+					<div class="text-wrap">
+						<!-- <img src="img/play2.png" alt=""> -->
+						<span class="loading">
+							<span class="loading-dot"></span>
+							<span class="loading-dot"></span>
+							<span class="loading-dot"></span>
+						</span>
+						<span class="text">老师正在纠音</span>
+					</div>
+					<div class="new-dot"></div>
+					<div class="role-time">5"</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 底部按钮 -->
+		<div class="app-option">
+			<!-- <div class="player-wrapper">
+				<div class="player-circles">
+					<div class="circle c-1"></div>
+					<div class="circle c-2"></div>
+					<div class="circle c-3"></div>
+				</div>
+				<div class="btn player">
+					<img class="playImg" src="img/player.png" alt="">
+					<img class="pauseImg" src="img/pause.png" alt="">
+				</div>
+			</div>
+			<p class="hints">{{hints}}</p> -->
+			<button class="btn nextQuz" @click="nextEvent">下一题</button>
+		</div>
+		
+		<!-- <transition name="fade-in">
+			<div class="part-wrapper">
+				<div class="title"><p>Part 1</p></div>
+				<div class="content">
+					<p>独家研发单词+句子智能口语测评</p>
+					<p>录音结束后点击按钮</p>
+					<p>共10题，共10分钟。</p>
+				</div>
+				<button class="btn">我知道啦</button>
+			</div>
+		</transition>
+		<div class="mask"></div> -->
+
+	</div>
+	<div class="no-support">
+		您的手机版系统版本太低，建议更新手机系统
+	</div>
+
+	<script>
+		
+		if (window.applicationCache || typeof(Vue) != 'undefined') {
+			var app = new Vue({
+				el: '#onlineTest',
+				data: {
+					appTitle: '基础语音测评',
+					showHome: false, // 首页
+					showOral: false, // 基础语音测评
+					showRolePlay: false, // 智能机器人角色测评
+					showTutor: false, // 一对一纠音
+					hints: '点击开始对话',
+					pageIndex: 0, // 页面index;
+					subIndex: -1, // 题目index;
+					titleIndex: 1, // 标题栏题目index;
+					oralData: []
+				},
+				methods: {
+					nextEvent: function() {
+						this.pageIndex++;
+						if(this.pageIndex == 4) {
+							this.pageIndex = 0;
+						}
+					}
+				},
+				watch: {
+					pageIndex: function() {
+						switch(this.pageIndex){
+							case 0:
+								this.showHome = true;
+								this.showOral = false;// 基础语音测评
+								this.showRolePlay = false; // 智能机器人角色测评
+								this.showTutor = false; // 一对一纠音
+								break;
+							case 1:
+								this.showHome = false;
+								this.showOral = true;// 基础语音测评
+								this.showRolePlay = false; // 智能机器人角色测评
+								this.showTutor = false; // 一对一纠音
+								break;
+							case 2:
+								this.showHome = false;
+								this.showOral = false;// 基础语音测评
+								this.showRolePlay = true; // 智能机器人角色测评
+								this.showTutor = false; // 一对一纠音
+								break;
+							case 3:
+								this.showHome = false;
+								this.showOral = false;// 基础语音测评
+								this.showRolePlay = false; // 智能机器人角色测评
+								this.showTutor = true; // 一对一纠音
+								break;
+						}
+					}
+				},
+				mounted: function() {
+					this.showHome = true;
+				}
+			});
+		} else {
+			$('#onlineTest').css('display', 'none');
+			$('.no-support').css('display', 'block');
+			console.log('您的手机版系统版本太低，建议更新手机系统')
+		}
+	</script>
+</body>
+</html>
