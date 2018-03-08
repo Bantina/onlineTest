@@ -212,6 +212,7 @@ body {
   text-align: center;
 }
 .online-screen .desc-translate {
+  padding: 0 20px;
   font-size: 18px;
   color: #999;
   text-align: center;
@@ -253,8 +254,26 @@ body {
   font-size: 30px;
   margin: 0 15px 0 6px;
 }
+.oral-test {
+  background: #fff;
+}
+.oral-test:after {
+  content: '';
+  display: block;
+  clear: both;
+  overflow: hidden;
+}
 .oral-test .desc-img {
   margin-top: 15px;
+}
+.oral-test .oral-test-item {
+  width: 100%;
+  float: left;
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+.role-test,
+.tutor-test {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
 }
 .role-item {
   margin: 30px 10px;
@@ -373,9 +392,6 @@ body {
   font-size: 22px;
   color: #999;
 }
-.oral-test {
-  background: #fff;
-}
 .app-option {
   width: 100%;
   height: 150px;
@@ -459,6 +475,9 @@ body {
   -moz-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+.part-gaide {
+  transition: all .2s ease;
+}
 .part-wrapper {
   width: 320px;
   height: 350px;
@@ -483,11 +502,26 @@ body {
   border-top-left-radius: 8px;
   color: #fff;
   background: #f74541;
-  background: url('../img/part-title-2.png') no-repeat;
+  background: url('../img/part-title-0.png') no-repeat;
   background-size: cover;
 }
 .part-wrapper .title p {
   padding: 15px 30px;
+}
+.part-wrapper .gaide-title-0 {
+  background: #f74541;
+  background: url('../img/part-title-0.png') no-repeat;
+  background-size: cover;
+}
+.part-wrapper .gaide-title-1 {
+  background: #f74541;
+  background: url('../img/part-title-1.png') no-repeat;
+  background-size: cover;
+}
+.part-wrapper .gaide-title-2 {
+  background: #f74541;
+  background: url('../img/part-title-2.png') no-repeat;
+  background-size: cover;
 }
 .part-wrapper .content {
   padding: 30px 25px;
@@ -563,12 +597,13 @@ body {
 }
 .slide-left-enter,
 .slide-right-leave-active {
-  opacity: 0;
-  -webkit-transform: translate(50px, 0);
-  transform: translate(50px, 0);
+  opacity: 0.4;
+  -webkit-transform: translate(10px, 0);
+  transform: translate(10px, 0);
 }
 .slide-left-leave-active,
 .slide-right-enter {
+  display: none;
   opacity: 0;
   -webkit-transform: translate(-50px, 0);
   transform: translate(-50px, 0);

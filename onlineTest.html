@@ -16,12 +16,12 @@
 				<img src="img/clock.png" alt="">
 				<span class="timer">00:00</span>
 			</span>
-			<span class="title">{{appTitle}} ({{titleIndex}}/3)</span>
+			<span class="title">{{appTitle}} <em v-if="!showTutor">({{titleIndex}}/{{oralData.length}})</em></span>
 			<span class="app-close">
 				<img src="img/close-btn.png" alt="">
 			</span>
 		</div>
-		<div class="app-progress" v-if="pageIndex!=0">
+		<div class="app-progress" v-show="!showHome && !showTutor">
 			<div class="current"></div>
 		</div>
 
@@ -37,25 +37,70 @@
 			</div>
 		</section>
 		
-		
 		<!-- 基础英语测评 -->
 		<section class="online-screen oral-test" v-if="showOral">
-			<div class="oral-test-item">
-				<div class="desc-img">
-					<img src="img/test.png" alt="">
+			<!-- <transition name="slide-left" v-for="(item,index) in oralData"> -->
+				<div class="oral-test-item" v-for="(item,index) in oralData" v-if="subIndex == index">
+					<div class="desc-img">
+						<img :src="item.img" alt="">
+					</div>
+					<p class="desc-topic">{{item.topic}}</p>
+					<p class="desc-translate">{{item.translate}}</p>
+					<div class="praise-wrapper">
+						<img src="img/praise.png" alt="">
+						<span>Fantastic!</span>
+					</div>
 				</div>
-				<p class="desc-topic">What's your name?</p>
-				<p class="desc-translate">你叫什么名字？</p>
-				<div class="praise-wrapper">
-					<img src="img/praise.png" alt="">
-					<span>Fantastic!</span>
+			<!-- </transition> -->
+			<!-- 
+				<div class="oral-test-item">
+					<div class="desc-img">
+						<img alt="">
+					</div>
+					<p class="desc-topic">item.topicffff</p>
+					<p class="desc-translate">item.translate}}</p>
+					<div class="praise-wrapper">
+						<img src="img/praise.png" alt="">
+						<span>Fantastic!</span>
+					</div>
 				</div>
-			</div>
+			</transition>
+			<transition name="slide-left">
+				<div class="oral-test-item">
+					<div class="desc-img">
+						<img  alt="">
+					</div>
+					<p class="desc-topic">item.topicfffffffff</p>
+					<p class="desc-translate">item.translate}}</p>
+					<div class="praise-wrapper">
+						<img src="img/praise.png" alt="">
+						<span>Fantastic!</span>
+					</div>
+				</div>
+			</transition> -->
 		</section>
 		
 		<!-- 角色扮演智能对话 -->
 		<section class="online-screen" v-if="showRolePlay">
-			<div class="role-item role-item-left">
+			<transition name="slide-left" v-for="(data,index) in oralData">
+				<div class="role-test" v-if="subIndex == index">
+					<div v-for="(item,index) in data.roles">
+						<div :class="(item.role && item.role == 0) ? 'role-item role-item-right' : 'role-item role-item-left'">
+							<div class="role-avator">
+								<img :src="item.avator" alt="">
+							</div>
+							<div class="role-content orange">
+								<p class="name">{{item.name}}</p>
+								<div class="text-wrap">
+									<img src="img/volume-white.png" alt="">
+									<span class="text">{{item.topic}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</transition>
+			<!-- <div class="role-item role-item-left">
 				<div class="role-avator">
 					<img src="img/avator.jpg" alt="">
 				</div>
@@ -90,49 +135,53 @@
 						<img src="img/volume-white.png" alt="">
 					</div>
 				</div>
-			</div>
+			</div> -->
 		</section>
 		
 		<!-- 一对一纠音 -->
 		<section class="online-screen" v-if="showTutor">
-			<div class="desc-img">
-				<img src="img/test.png" alt="">
-			</div>
-			<div class="desc-paragraph">
-				My aunt Jennifer is an actress. She must be at least thirty-five years old. In spite of this, she often appears on the stage as a young girl. Jennifer will have to take part in a new play soon. This time, she will be a girl of seventeen.
-			</div>
-			<div class="role-item role-item-right">
-				<div class="role-avator">
-					<img src="img/avator.jpg" alt="">
-				</div>
-				<div class="role-content red">
-					<p class="name">Lisa黎明老师</p>
-					<div class="text-wrap">
-						<span class="text">What's your name?</span>
-						<img src="img/play2.png" alt="">
+			<transition name="slide-left" v-for="(data,index) in oralData">
+				<div class="tutor-test">
+					<div class="desc-img">
+						<img :src="oralData.img" alt="">
 					</div>
-					<div class="role-time">5"</div>
-				</div>
-			</div>
-			<div class="role-item role-item-left">
-				<div class="role-avator">
-					<img src="img/avator.jpg" alt="">
-				</div>
-				<div class="role-content gray">
-					<p class="name">Lisa黎明老师</p>
-					<div class="text-wrap">
-						<!-- <img src="img/play2.png" alt=""> -->
-						<span class="loading">
-							<span class="loading-dot"></span>
-							<span class="loading-dot"></span>
-							<span class="loading-dot"></span>
-						</span>
-						<span class="text">老师正在纠音</span>
+					<div class="desc-paragraph">
+						{{oralData.topic}}
 					</div>
-					<div class="new-dot"></div>
-					<div class="role-time">5"</div>
+					<div class="role-item role-item-right">
+						<div class="role-avator">
+							<img src="img/avator.jpg" alt="">
+						</div>
+						<div class="role-content red">
+							<p class="name">Lisa黎明老师</p>
+							<div class="text-wrap">
+								<span class="text">What's your name?</span>
+								<img src="img/play2.png" alt="">
+							</div>
+							<div class="role-time">5"</div>
+						</div>
+					</div>
+					<div class="role-item role-item-left">
+						<div class="role-avator">
+							<img src="img/avator.jpg" alt="">
+						</div>
+						<div class="role-content gray">
+							<p class="name">Lisa黎明老师</p>
+							<div class="text-wrap">
+								<!-- <img src="img/play2.png" alt=""> -->
+								<span class="loading">
+									<span class="loading-dot"></span>
+									<span class="loading-dot"></span>
+									<span class="loading-dot"></span>
+								</span>
+								<span class="text">老师正在纠音</span>
+							</div>
+							<div class="new-dot"></div>
+							<div class="role-time">5"</div>
+						</div>
+					</div>
 				</div>
-			</div>
+			</transition>
 		</section>
 
 		<!-- 底部按钮 -->
@@ -152,18 +201,18 @@
 			<button class="btn nextQuz" @click="nextEvent">下一题</button>
 		</div>
 		
-		<!-- <transition name="fade-in">
-			<div class="part-wrapper">
-				<div class="title"><p>Part 1</p></div>
-				<div class="content">
-					<p>独家研发单词+句子智能口语测评</p>
-					<p>录音结束后点击按钮</p>
-					<p>共10题，共10分钟。</p>
+		<transition name="fade-out">
+			<div class="part-gaide" v-show="showGaide">
+				<div class="part-wrapper">
+					<div :class="['title', gaidesData.class]"><p>Part {{pageIndex}}</p></div>
+					<div class="content">
+						<p v-for="(item,index) in gaidesData.content">{{item}}</p>
+					</div>
+					<button class="btn" @click="gaideClose">知道了</button>
 				</div>
-				<button class="btn">我知道啦</button>
+				<div class="mask"></div>
 			</div>
 		</transition>
-		<div class="mask"></div> -->
 
 	</div>
 	<div class="no-support">
@@ -172,11 +221,137 @@
 
 	<script>
 		
+		var json1 = { // 基础
+			'data': [{
+				'testId': '10003',
+				'topic': 'compatibility',
+				'translate': '兼容性',
+				'img': 'img/test.png'
+			}, {
+				'testId': '10003',
+				'topic': 'What is your name',
+				'translate': '你叫什么名字？',
+				'img': 'img/test.png'
+			}, {
+				'testId': '10003',
+				'topic': 'The math problems perlex the boy.',
+				'translate': '这些数学题让男孩感到困惑。',
+				'img': 'img/test.png'
+			}, {
+				'testId': '10003',
+				'topic': 'If I do, what kind of compatibility problem would I have? ',
+				'translate': '如果我这么做的话，我会遇到什么样的兼容问题呢?',
+				'img': 'img/test.png'
+			}, {
+				'testId': '10003',
+				'topic': "If you're battery level is dropping, the icon should reflect that; same goes for volume controls, memory usage, and other commonly used system resources. ",
+				'translate': '如果你的电池容量正在下降，电池图标就会表现出来。 同样的，音量控制、内存占用以及其他常用的系统自由都是如此。',
+				'img': 'img/test.png'
+			}],
+			'status': 1
+		}
+
+		var json2 = {
+			'data':[{
+				'roles': [{
+						'testId': '10003',
+						'name': 'Lisa',
+						'topic': 'What is your namea',
+						'avator': 'img/avator.jpg',
+						'role': '0',
+						'audio': '1.mp3'
+					}, {
+						'testId': '10003',
+						'name': 'Lisa',
+						'topic': 'My name is kkk',
+						'avator': 'img/avator.jpg',
+						'role': '1'
+					}, {
+						'testId': '10003',
+						'name': 'Lisa',
+						'topic': 'ooooo',
+						'avator': 'img/avator.jpg',
+						'role': '0',
+						'audio': '1.mp3'
+					}]
+			}, {
+				'roles': [{
+						'testId': '10003',
+						'name': 'Lisa',
+						'topic': 'What is your name b',
+						'avator': 'img/avator.jpg',
+						'role': '1',
+						'audio': '1.mp3'
+					}, {
+						'testId': '10003',
+						'name': 'Lisa',
+						'topic': 'My name is kkkb',
+						'avator': 'img/avator.jpg',
+						'role': '0'
+					}, {
+						'testId': '10003',
+						'name': 'Lisa',
+						'topic': 'What is your nameb',
+						'avator': 'img/avator.jpg',
+						'role': '0'
+					}, {
+						'testId': '10003',
+						'name': 'Lisa',
+						'topic': 'What is your nameb',
+						'avator': 'img/avator.jpg',
+						'role': '1'
+					}]
+			}, {
+				'roles': [{
+						'testId': '10003',
+						'name': 'Lisa',
+						'topic': 'What is your namec',
+						'avator': 'img/avator.jpg',
+						'role': '0',
+						'audio': '1.mp3'
+					}, {
+						'testId': '10003',
+						'name': 'Lisa',
+						'topic': 'My name is kkkc',
+						'avator': 'img/avator.jpg',
+						'role': '1'
+					}, {
+						'testId': '10003',
+						'name': 'Lisa',
+						'topic': 'What is your namec',
+						'avator': 'img/avator.jpg',
+						'role': '0'
+					}, {
+						'testId': '10003',
+						'name': 'Lisa',
+						'topic': 'What is your namec',
+						'avator': 'img/avator.jpg',
+						'role': '1'
+					}, {
+						'testId': '10003',
+						'name': 'Lisa',
+						'topic': 'What is your namec',
+						'avator': 'img/avator.jpg',
+						'role': '1'
+				}]
+			}],
+			'status': 1
+		}
+
+		var json3 = {
+			'data': {
+				'testId': '10003',
+				'topic': 'My aunt Jennifer is an actress. She must be at least thirty-five years old. In spite of this, she often appears on the stage as a young girl. Jennifer will have to take part in a new play soon. This time, she will be a girl of seventeen.aaaa',
+				'img': 'img/test.png'
+			},
+			'status': 1
+		}
+
 		if (window.applicationCache || typeof(Vue) != 'undefined') {
 			var app = new Vue({
 				el: '#onlineTest',
 				data: {
-					appTitle: '基础语音测评',
+					appTitle: '', // 题型标题
 					showHome: false, // 首页
 					showOral: false, // 基础语音测评
 					showRolePlay: false, // 智能机器人角色测评
@@ -185,48 +360,151 @@
 					pageIndex: 0, // 页面index;
 					subIndex: -1, // 题目index;
 					titleIndex: 1, // 标题栏题目index;
-					oralData: []
+					oralData: [],
+					gaidesData: '',
+					showGaide: false
 				},
 				methods: {
+
 					nextEvent: function() {
-						this.pageIndex++;
-						if(this.pageIndex == 4) {
-							this.pageIndex = 0;
+						if (this.pageIndex == 0) {
+							this.oralAjax(json1);
+						} else if (this.pageIndex == 1) {
+							if (this.subIndex < (this.oralData.length - 1)) {
+								this.subIndex++;
+							} else {
+								this.rolePlayAjax(json2);
+							}
+						} else if (this.pageIndex == 2) {
+							if (this.subIndex < (this.oralData.length - 1)) {
+								this.subIndex++;
+							} else {
+								this.tutorAjax(json3);
+							}
 						}
+
+						
+
+						
+					},
+
+					// 请求基础语音数据
+					oralAjax: function(json) {
+						if (json.status == 1){
+							this.appTitle = '基础语音测评';
+							if (this.titleIndex == this.oralData.length) {
+								$('.app-progress .current').css({'width': 0});
+							}
+							this.oralData = json.data;
+							this.subIndex = 0;
+							this.pageIndex++;
+							this.showHome = false;
+							this.showOral = true;
+						} else {
+							console.log('获取题目失败');
+						}
+					},
+
+					rolePlayAjax: function(json) {
+						if (json.status == 1){
+							this.appTitle = '智能机器人对话';
+							if (this.titleIndex == this.oralData.length) {
+								$('.app-progress .current').css({'width': 0});
+							}
+							this.oralData = json.data;
+							this.subIndex = 0;
+							this.pageIndex++;
+							this.showOral = false;
+							this.showRolePlay = true;
+						} else {
+							console.log('获取题目失败');
+						}
+					},
+
+					tutorAjax: function(json) {
+						if (json.status == 1){
+							this.appTitle = '一对一纠音';
+							if (this.titleIndex == this.oralData.length) {
+								$('.app-progress .current').css({'width': 0});
+							}
+							this.oralData = json.data;
+							this.subIndex = 0;
+							this.pageIndex++;
+							this.showRolePlay = false;
+							this.showTutor = true;
+						} else {
+							console.log('获取题目失败');
+						}
+					},
+
+					gaideClose: function() {
+						this.showGaide = false;
 					}
 				},
 				watch: {
+					subIndex: function() {
+						this.titleIndex = (this.subIndex + 1);
+						$('.app-progress .current').animate({'width': Number(this.titleIndex/this.oralData.length*100)+'%'}, 500);
+					},
 					pageIndex: function() {
+						// switch(this.pageIndex){
+						// 	case 0:
+						// 		this.showHome = true;
+						// 		this.showOral = false;// 基础语音测评
+						// 		this.showRolePlay = false; // 智能机器人角色测评
+						// 		this.showTutor = false; // 一对一纠音
+						// 		break;
+						// 	case 1:
+						// 		this.showHome = false;
+						// 		this.showOral = true;// 基础语音测评
+						// 		this.showRolePlay = false; // 智能机器人角色测评
+						// 		this.showTutor = false; // 一对一纠音
+						// 		break;
+						// 	case 2:
+						// 		this.showHome = false;
+						// 		this.showOral = false;// 基础语音测评
+						// 		this.showRolePlay = true; // 智能机器人角色测评
+						// 		this.showTutor = false; // 一对一纠音
+						// 		break;
+						// 	case 3:
+						// 		this.showHome = false;
+						// 		this.showOral = false;// 基础语音测评
+						// 		this.showRolePlay = false; // 智能机器人角色测评
+						// 		this.showTutor = true; // 一对一纠音
+						// 		break;
+						// }
 						switch(this.pageIndex){
-							case 0:
-								this.showHome = true;
-								this.showOral = false;// 基础语音测评
-								this.showRolePlay = false; // 智能机器人角色测评
-								this.showTutor = false; // 一对一纠音
-								break;
 							case 1:
-								this.showHome = false;
-								this.showOral = true;// 基础语音测评
-								this.showRolePlay = false; // 智能机器人角色测评
-								this.showTutor = false; // 一对一纠音
+								this.gaidesData = {
+									'content': ['独家研发单词+句子智能口语测评', '录音结束后点击按钮','共10题，共10分钟。'],
+									'class': 'gaide-title-0'
+								};
 								break;
 							case 2:
-								this.showHome = false;
-								this.showOral = false;// 基础语音测评
-								this.showRolePlay = true; // 智能机器人角色测评
-								this.showTutor = false; // 一对一纠音
+								this.gaidesData = { 
+									'content': ['人机智能对话', '录音结束后点击按钮','共3题，共10分钟。'],
+									'class': 'gaide-title-1'
+								};
 								break;
 							case 3:
-								this.showHome = false;
-								this.showOral = false;// 基础语音测评
-								this.showRolePlay = false; // 智能机器人角色测评
-								this.showTutor = true; // 一对一纠音
+								this.gaidesData = {
+									'content': ['一对一纠音', '录音结束后点击按钮','完成后老师会进行纠音和点评'],
+									'class': 'gaide-title-2'
+								};
+								break;
+							default:
+								this.gaidesData = {
+									'content': ['独家研发单词+句子智能口语测评', '录音结束后点击按钮'],
+									'class': 'gaide-title-0'
+								};
 								break;
 						}
+						this.showGaide = true;
 					}
 				},
 				mounted: function() {
 					this.showHome = true;
+					// this.rolePlayAjax(json2);
 				}
 			});
 		} else {
@@ -234,6 +512,8 @@
 			$('.no-support').css('display', 'block');
 			console.log('您的手机版系统版本太低，建议更新手机系统')
 		}
+
+
 	</script>
 </body>
 </html>
